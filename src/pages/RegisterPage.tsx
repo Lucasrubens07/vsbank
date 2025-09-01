@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button, Input } from '../components/ui';
+import { Building2, UserPlus } from 'lucide-react';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -48,126 +50,120 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 animate-fade-in">
+        {/* Logo e Título */}
+        <div className="text-center">
+          <div className="mx-auto w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center shadow-xl mb-6">
+            <Building2 className="w-10 h-10 text-white" />
+          </div>
+          <div className="mx-auto w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-4">
+            <UserPlus className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-3xl font-extrabold text-blue-600 mb-2">
             Criar Conta
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-gray-600 text-lg">
             VSBank - Sua conta digital
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Nome completo
-              </label>
-              <input
-                id="name"
+        {/* Formulário */}
+        <div className="bg-blue-600 rounded-2xl p-8 border border-blue-500/50 shadow-2xl">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <Input
+                label="Nome completo"
                 name="name"
                 type="text"
                 required
-                className="input-field"
-                placeholder="Nome completo"
+                placeholder="Digite seu nome completo"
                 value={formData.name}
                 onChange={handleChange}
                 autoFocus
+                fullWidth
               />
-            </div>
-            
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
-              <input
-                id="email"
+              
+              <Input
+                label="Email"
                 name="email"
                 type="email"
                 required
-                className="input-field"
-                placeholder="Email"
+                placeholder="Digite seu email"
                 value={formData.email}
                 onChange={handleChange}
+                fullWidth
               />
-            </div>
-            
-            <div>
-              <label htmlFor="cpf" className="sr-only">
-                CPF
-              </label>
-              <input
-                id="cpf"
+              
+              <Input
+                label="CPF"
                 name="cpf"
                 type="text"
                 required
-                className="input-field"
-                placeholder="CPF"
+                placeholder="Digite seu CPF"
                 value={formData.cpf}
                 onChange={handleChange}
+                fullWidth
               />
-            </div>
-            
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Senha
-              </label>
-              <input
-                id="password"
+              
+              <Input
+                label="Senha"
                 name="password"
                 type="password"
                 required
-                className="input-field"
-                placeholder="Senha"
+                placeholder="Digite sua senha"
                 value={formData.password}
                 onChange={handleChange}
+                fullWidth
               />
-            </div>
-            
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirmar senha
-              </label>
-              <input
-                id="confirmPassword"
+              
+              <Input
+                label="Confirmar senha"
                 name="confirmPassword"
                 type="password"
                 required
-                className="input-field"
-                placeholder="Confirmar senha"
+                placeholder="Confirme sua senha"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                fullWidth
               />
             </div>
-          </div>
 
-          {error && (
-            <div className="text-error-600 text-sm text-center">
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                <p className="text-red-200 text-sm text-center">
+                  {error}
+                </p>
+              </div>
+            )}
 
-          <div>
-            <button
+            <Button
               type="submit"
-              disabled={isLoading}
-              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              size="lg"
+              fullWidth
+              loading={isLoading}
             >
               {isLoading ? 'Criando conta...' : 'Criar conta'}
-            </button>
-          </div>
+            </Button>
 
-          <div className="text-center">
-            <Link
-              to="/login"
-              className="font-medium text-primary-600 hover:text-primary-500"
-            >
-              Já tem uma conta? Faça login
-            </Link>
-          </div>
-        </form>
+            <div className="text-center">
+              <Link
+                to="/login"
+                className="font-medium text-blue-100 hover:text-white transition-colors text-lg"
+              >
+                Já tem uma conta? Faça login
+              </Link>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-gray-500 text-sm">
+            © 2024 VSBank. Todos os direitos reservados.
+          </p>
+        </div>
       </div>
     </div>
   );

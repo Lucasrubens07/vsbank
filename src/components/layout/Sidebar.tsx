@@ -5,7 +5,8 @@ import {
   CreditCard, 
   QrCode, 
   User, 
-  LogOut
+  LogOut,
+  Building2
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -62,10 +63,17 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-lg flex flex-col">
+    <div className="w-64 bg-blue-900 shadow-2xl flex flex-col border-r border-blue-700">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-primary-600">VSBank</h1>
+      <div className="p-6 border-b border-blue-700 bg-blue-950">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shadow-lg">
+            <Building2 className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-white">
+            VSBank
+          </h1>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -75,10 +83,10 @@ const Sidebar = () => {
             <NavLink
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-white/20 text-white shadow-lg scale-105'
+                    : 'text-blue-100 hover:bg-white/10 hover:text-white'
                 }`
               }
             >
@@ -94,10 +102,10 @@ const Sidebar = () => {
                     key={child.path}
                     to={child.path}
                     className={({ isActive }) =>
-                      `block px-3 py-1 text-sm rounded transition-colors ${
+                      `block px-3 py-1 text-sm rounded transition-all duration-200 ${
                         isActive
-                          ? 'text-primary-600 font-medium'
-                          : 'text-gray-600 hover:text-gray-900'
+                          ? 'text-white font-medium bg-white/20 px-2 py-1 rounded'
+                          : 'text-blue-200 hover:text-white hover:bg-white/10 px-2 py-1 rounded'
                       }`
                     }
                   >
@@ -111,14 +119,14 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 space-y-2">
+      <div className="p-4 border-t border-blue-700 space-y-2 bg-blue-950">
         <NavLink
           to="/dashboard/minha-conta"
           className={({ isActive }) =>
-            `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+            `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
               isActive
-                ? 'bg-primary-100 text-primary-700'
-                : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-white/20 text-white shadow-lg'
+                : 'text-blue-100 hover:bg-white/10 hover:text-white'
             }`
           }
         >
@@ -128,7 +136,7 @@ const Sidebar = () => {
         
         <button
           onClick={handleLogout}
-          className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+          className="flex items-center w-full px-3 py-2 text-sm font-medium text-blue-100 hover:bg-white/10 hover:text-white rounded-lg transition-all duration-200"
         >
           <LogOut className="w-5 h-5 mr-3" />
           Sair

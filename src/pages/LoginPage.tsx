@@ -1,123 +1,137 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '../stores/authStore';
-import { authService } from '../services/api';
-import { loginSchema, type LoginFormData } from '../schemas/auth';
+import { Button, Input } from '../components/ui';
+import { Building2, Eye, EyeOff } from 'lucide-react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setPreToken, setLoading } = useAuthStore();
-  const [error, setError] = useState('');
-
-  const {
-    register,
-    handleSubmit: handleFormSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+  const { setPreToken, setLoading, isLoading } = useAuthStore();
+  const [formData, setFormData] = useState({
+    identifier: '',
+    password: '',
   });
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = async (data: LoginFormData) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const response = await authService.login(data.identifier, data.password);
-      setPreToken(response.preToken);
+      // Mock de login - simula uma chamada de API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simula sucesso e gera preToken
+      const mockPreToken = 'mock_pre_token_' + Date.now();
+      setPreToken(mockPreToken);
+      
+      // Redireciona para 2FA
       navigate('/twofa');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao fazer login. Tente novamente.');
+      setError('Erro ao fazer login. Tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 animate-fade-in">
+        {/* Logo e Título */}
+        <div className="text-center">
+          <div className="mx-auto w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center shadow-xl mb-6">
+            <Building2 className="w-10 h-10 text-white" />
+          </div>
+          <h2 className="text-4xl font-extrabold text-blue-600 mb-2">
             VSBank
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-gray-600 text-lg">
             Faça login na sua conta
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleFormSubmit(onSubmit)}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="identifier" className="sr-only">
-                Email ou CPF
-              </label>
-              <input
-                id="identifier"
+        {/* Formulário */}
+        <div className="bg-blue-600 rounded-2xl p-8 border border-blue-500/50 shadow-2xl">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <Input
+                label="Email ou CPF"
+                name="identifier"
                 type="text"
-                className={`input-field rounded-t-md ${
-                  errors.identifier ? 'border-error-500 focus:ring-error-500' : ''
-                }`}
-                placeholder="Email ou CPF"
+                required
+                placeholder="Digite seu email ou CPF"
+                value={formData.identifier}
+                onChange={handleChange}
                 autoFocus
-                {...register('identifier')}
+                fullWidth
               />
+              
+              <div className="relative">
+                <Input
+                  label="Senha"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  placeholder="Digite sua senha"
+                  value={formData.password}
+                  onChange={handleChange}
+                  fullWidth
+                  rightIcon={showPassword ? EyeOff : Eye}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-8 text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                className={`input-field rounded-b-md ${
-                  errors.password ? 'border-error-500 focus:ring-error-500' : ''
-                }`}
-                placeholder="Senha"
-                {...register('password')}
-              />
-            </div>
-          </div>
 
-          {/* Mensagens de erro dos campos */}
-          {errors.identifier && (
-            <div className="text-error-600 text-sm text-center">
-              {errors.identifier.message}
-            </div>
-          )}
-          {errors.password && (
-            <div className="text-error-600 text-sm text-center">
-              {errors.password.message}
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                <p className="text-red-200 text-sm text-center">
+                  {error}
+                </p>
+              </div>
+            )}
 
-          {/* Mensagem de erro geral */}
-          {error && (
-            <div className="text-error-600 text-sm text-center">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <button
+            <Button
               type="submit"
-              disabled={isSubmitting}
-              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              size="lg"
+              fullWidth
+              loading={isLoading}
             >
-              {isSubmitting ? 'Entrando...' : 'Entrar'}
-            </button>
-          </div>
+              {isLoading ? 'Entrando...' : 'Entrar'}
+            </Button>
 
-          <div className="text-center">
-            <Link
-              to="/register"
-              className="font-medium text-primary-600 hover:text-primary-500"
-            >
-              Criar conta
-            </Link>
-          </div>
-        </form>
+            <div className="text-center">
+              <Link
+                to="/register"
+                className="font-medium text-blue-100 hover:text-white transition-colors text-lg"
+              >
+                Criar conta
+              </Link>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-gray-500 text-sm">
+            © 2024 VSBank. Todos os direitos reservados.
+          </p>
+        </div>
       </div>
     </div>
   );
