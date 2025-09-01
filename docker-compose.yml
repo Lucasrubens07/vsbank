@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  vsbank:
+    build: .
+    ports:
+      - "3000:80"
+    container_name: vsbank-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - vsbank-network
+
+  vsbank-dev:
+    build: 
+      context: .
+      target: builder
+    ports:
+      - "5173:5173"
+    container_name: vsbank-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
+    environment:
+      - NODE_ENV=development
+    networks:
+      - vsbank-network
+
+networks:
+  vsbank-network:
+    driver: bridge 
