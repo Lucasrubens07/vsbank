@@ -78,12 +78,12 @@ const LoginPage = () => {
               <div className="relative">
                 <Input
                   label="Senha"
-                  name="password"
+                name="password"
                   type={showPassword ? 'text' : 'password'}
-                  required
+                required
                   placeholder="Digite sua senha"
-                  value={formData.password}
-                  onChange={handleChange}
+                value={formData.password}
+                onChange={handleChange}
                   fullWidth
                   rightIcon={showPassword ? EyeOff : Eye}
                 />
@@ -94,16 +94,16 @@ const LoginPage = () => {
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
-              </div>
             </div>
+          </div>
 
-            {error && (
+          {error && (
               <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
                 <p className="text-red-200 text-sm text-center">
-                  {error}
+              {error}
                 </p>
-              </div>
-            )}
+            </div>
+          )}
 
             <Button
               type="submit"
@@ -115,15 +115,15 @@ const LoginPage = () => {
               {isLoading ? 'Entrando...' : 'Entrar'}
             </Button>
 
-            <div className="text-center">
-              <Link
-                to="/register"
+          <div className="text-center">
+            <Link
+              to="/register"
                 className="font-medium text-blue-100 hover:text-white transition-colors text-lg"
-              >
-                Criar conta
-              </Link>
-            </div>
-          </form>
+            >
+              Criar conta
+            </Link>
+          </div>
+        </form>
         </div>
 
         {/* Footer */}

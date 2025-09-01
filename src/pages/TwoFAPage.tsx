@@ -109,60 +109,60 @@ const TwoFAPage = () => {
         {/* Formulário */}
         <div className="bg-blue-600 rounded-2xl p-8 border border-blue-500/50 shadow-2xl">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="code" className="sr-only">
-                Código de verificação
-              </label>
+          <div>
+            <label htmlFor="code" className="sr-only">
+              Código de verificação
+            </label>
               <div className="flex justify-center space-x-3">
-                {code.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => { inputRefs.current[index] = el; }}
-                    type="text"
-                    maxLength={1}
+              {code.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => { inputRefs.current[index] = el; }}
+                  type="text"
+                  maxLength={1}
                     className="w-14 h-14 text-center text-2xl font-bold border-2 border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 bg-white/20 text-white placeholder-white/50 transition-all duration-200 hover:border-white/50"
-                    value={digit}
-                    onChange={(e) => handleCodeChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    autoFocus={index === 0}
-                  />
-                ))}
-              </div>
+                  value={digit}
+                  onChange={(e) => handleCodeChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  autoFocus={index === 0}
+                />
+              ))}
             </div>
+          </div>
 
-            {error && (
+          {error && (
               <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
                 <p className="text-red-200 text-sm text-center">
-                  {error}
+              {error}
                 </p>
-              </div>
-            )}
+            </div>
+          )}
 
-            <div className="space-y-3">
+          <div className="space-y-3">
               <Button
-                type="submit"
+              type="submit"
                 variant="secondary"
                 size="lg"
                 fullWidth
                 loading={isLoading}
                 disabled={code.join('').length !== 6}
-              >
-                {isLoading ? 'Verificando...' : 'Confirmar'}
+            >
+              {isLoading ? 'Verificando...' : 'Confirmar'}
               </Button>
-              
+            
               <Button
-                type="button"
+              type="button"
                 variant="ghost"
                 size="lg"
                 fullWidth
-                onClick={handleCancel}
+              onClick={handleCancel}
                 icon={ArrowLeft}
                 className="text-white border-white/30 hover:bg-white/10 hover:border-white/50"
-              >
+            >
                 Voltar ao Login
               </Button>
-            </div>
-          </form>
+          </div>
+        </form>
         </div>
 
         {/* Footer */}

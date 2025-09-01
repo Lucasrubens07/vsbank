@@ -173,23 +173,23 @@ const HomePage = () => {
       {/* Card de Saldo */}
       <Card className="bg-blue-600 border-blue-500/50 shadow-xl">
         <div className="p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-medium">Saldo Disponível</h2>
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
               <DollarSign className="w-6 h-6" />
             </div>
-          </div>
-          <div className="text-4xl font-bold mb-3 text-blue-100">
-            {formatCurrency(balance)}
-          </div>
-          <div className="flex items-center space-x-4 text-sm text-blue-200">
-            <span>Conta Corrente</span>
-            <span>•</span>
-            <span>Agência: 0001</span>
-            <span>•</span>
-            <span>Conta: 123456-7</span>
-          </div>
         </div>
+          <div className="text-4xl font-bold mb-3 text-blue-100">
+          {formatCurrency(balance)}
+        </div>
+          <div className="flex items-center space-x-4 text-sm text-blue-200">
+          <span>Conta Corrente</span>
+          <span>•</span>
+          <span>Agência: 0001</span>
+          <span>•</span>
+          <span>Conta: 123456-7</span>
+        </div>
+      </div>
       </Card>
 
       {/* Serviços Rápidos */}
@@ -206,8 +206,8 @@ const HomePage = () => {
             >
               <Card className="p-4 border-gray-200 hover:border-blue-300 transition-all duration-300 group-hover:shadow-lg">
                 <div className={`${service.color} w-14 h-14 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
-                  {service.icon}
-                </div>
+                {service.icon}
+              </div>
                 <h3 className="font-semibold text-gray-900 mb-2 text-lg">{service.name}</h3>
                 <p className="text-gray-600 text-sm">{service.description}</p>
               </Card>
@@ -305,18 +305,18 @@ const HomePage = () => {
         </Card>
 
         <Card className="p-6 border-orange-200 bg-orange-50">
-          <div className="flex items-center justify-between mb-4">
+           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900 text-lg">Próximos Vencimentos</h3>
             <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
               <Calendar className="w-5 h-5 text-orange-600" />
             </div>
-          </div>
+           </div>
           <p className="text-3xl font-bold text-orange-600 mb-2">
-            {formatCurrency(1247.80)}
-          </p>
+             {formatCurrency(1247.80)}
+           </p>
           <p className="text-gray-600">
-            Vence em 5 dias
-          </p>
+             Vence em 5 dias
+           </p>
         </Card>
       </div>
     </div>

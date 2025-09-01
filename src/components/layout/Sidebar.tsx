@@ -1,21 +1,30 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
+import { useState } from 'react';
 import { 
   Home, 
   CreditCard, 
   QrCode, 
   User, 
-  LogOut,
-  Building2
+  LogOut
 } from 'lucide-react';
 
 const Sidebar = () => {
   const { clear } = useAuthStore();
   const navigate = useNavigate();
+  const [expandedItems, setExpandedItems] = useState<string[]>(['home']);
 
   const handleLogout = () => {
     clear();
     navigate('/login');
+  };
+
+  const toggleExpanded = (itemId: string) => {
+    setExpandedItems(prev => 
+      prev.includes(itemId) 
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
   };
 
   const menuItems = [
@@ -24,12 +33,7 @@ const Sidebar = () => {
       label: 'Home',
       icon: Home,
       path: '/dashboard',
-      children: [
-        { label: 'Index', path: '/dashboard' },
-        { label: 'Entrada', path: '/dashboard/entrada' },
-        { label: 'Saída', path: '/dashboard/saida' },
-        { label: 'Relatório', path: '/dashboard/relatorio' }
-      ]
+      children: []
     },
     {
       id: 'credito',
@@ -37,14 +41,14 @@ const Sidebar = () => {
       icon: CreditCard,
       path: '/dashboard/credito',
       children: [
-        { label: 'Empréstimos', path: '/dashboard/credito' },
-        { label: 'FGTS', path: '/dashboard/credito/fgts' },
-        { label: 'Consignado', path: '/dashboard/credito/consignado' },
-        { label: 'Consórcios', path: '/dashboard/credito/consorcios' },
-        { label: 'Veicular', path: '/dashboard/credito/veicular' },
-        { label: 'Rural', path: '/dashboard/credito/rural' },
+        { label: 'Empréstimo', path: '/dashboard/credito' },
+        { label: 'Antecipar FGTS', path: '/dashboard/credito/fgts' },
+        { label: 'Crédito Consignado', path: '/dashboard/credito/consignado' },
+        { label: 'Consórcio', path: '/dashboard/credito/consorcio' },
+        { label: 'Crédito Veicular', path: '/dashboard/credito/veicular' },
+        { label: 'Crédito Rural', path: '/dashboard/credito/rural' },
         { label: 'Portabilidade', path: '/dashboard/credito/portabilidade' },
-        { label: 'Luz', path: '/dashboard/credito/luz' }
+        { label: 'Conta de Luz', path: '/dashboard/credito/luz' }
       ]
     },
     {
@@ -53,93 +57,97 @@ const Sidebar = () => {
       icon: QrCode,
       path: '/dashboard/pix',
       children: [
-        { label: 'Transferir/QR', path: '/dashboard/pix' },
+        { label: 'Transferência', path: '/dashboard/pix' },
+        { label: 'QR Code', path: '/dashboard/pix/qr-code' },
         { label: 'Copia e Cola', path: '/dashboard/pix/copiaecola' },
-        { label: 'Extrato', path: '/dashboard/pix/extrato' },
-        { label: 'Chaves', path: '/dashboard/pix/chaves' },
+        { label: 'Extrato PIX', path: '/dashboard/pix/extrato' },
+        { label: 'Minhas Chaves', path: '/dashboard/pix/chaves' },
         { label: 'Dúvidas', path: '/dashboard/pix/duvidas' }
       ]
+    },
+    {
+      id: 'minha-conta',
+      label: 'Minha Conta',
+      icon: User,
+      path: '/dashboard/minha-conta',
+      children: []
     }
   ];
 
   return (
-    <div className="w-64 bg-blue-900 shadow-2xl flex flex-col border-r border-blue-700">
-      {/* Header */}
-      <div className="p-6 border-b border-blue-700 bg-blue-950">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shadow-lg">
-            <Building2 className="w-6 h-6 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">
-            VSBank
-          </h1>
-        </div>
+    <div className="bg-blue-800 shadow-lg w-64 min-h-screen flex flex-col">
+      {/* Logo */}
+      <div className="p-6 border-b border-blue-700">
+        <h1 className="text-2xl font-bold text-white">VSBank</h1>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
-        {menuItems.map((item) => (
-          <div key={item.id} className="space-y-1">
-            <NavLink
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-white/20 text-white shadow-lg scale-105'
-                    : 'text-blue-100 hover:bg-white/10 hover:text-white'
-                }`
-              }
-            >
-              <item.icon className="w-5 h-5 mr-3" />
-              {item.label}
-            </NavLink>
-            
-            {/* Submenu */}
-            {item.children && (
-              <div className="ml-8 space-y-1">
-                {item.children.map((child) => (
-                  <NavLink
-                    key={child.path}
-                    to={child.path}
-                    className={({ isActive }) =>
-                      `block px-3 py-1 text-sm rounded transition-all duration-200 ${
-                        isActive
-                          ? 'text-white font-medium bg-white/20 px-2 py-1 rounded'
-                          : 'text-blue-200 hover:text-white hover:bg-white/10 px-2 py-1 rounded'
-                      }`
-                    }
+      {/* Menu Items */}
+      <nav className="flex-1 p-4">
+        <ul className="space-y-2">
+          {menuItems.map((item) => (
+            <li key={item.id}>
+              {item.children.length > 0 ? (
+                <div>
+                  <button
+                    onClick={() => toggleExpanded(item.id)}
+                    className="w-full flex items-center justify-between p-3 text-left text-blue-100 hover:bg-blue-700 rounded-lg transition-colors"
                   >
-                    {child.label}
-                  </NavLink>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+                    <div className="flex items-center">
+                      <item.icon className="w-5 h-5 mr-3" />
+                      <span className="font-medium">{item.label}</span>
+                    </div>
+                    {expandedItems.includes(item.id) ? (
+                      <span className="text-blue-300">▼</span>
+                    ) : (
+                      <span className="text-blue-300">▶</span>
+                    )}
+                  </button>
+                  
+                  {expandedItems.includes(item.id) && (
+                    <ul className="ml-8 mt-2 space-y-1">
+                      {item.children.map((child) => (
+                        <li key={child.path}>
+                          <NavLink
+                            to={child.path}
+                            className={({ isActive }) =>
+                              `block p-2 text-sm text-blue-200 hover:text-white hover:bg-blue-700 rounded transition-colors ${
+                                isActive ? 'text-white bg-blue-700' : ''
+                              }`
+                            }
+                          >
+                            {child.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center p-3 text-blue-100 hover:bg-blue-700 rounded-lg transition-colors ${
+                      isActive ? 'bg-blue-700 text-white' : ''
+                    }`
+                  }
+                >
+                  <item.icon className="w-5 h-5 mr-3" />
+                  <span className="font-medium">{item.label}</span>
+                </NavLink>
+              )}
+            </li>
+          ))}
+        </ul>
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-blue-700 space-y-2 bg-blue-950">
-        <NavLink
-          to="/dashboard/minha-conta"
-          className={({ isActive }) =>
-            `flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-              isActive
-                ? 'bg-white/20 text-white shadow-lg'
-                : 'text-blue-100 hover:bg-white/10 hover:text-white'
-            }`
-          }
-        >
-          <User className="w-5 h-5 mr-3" />
-          Minha Conta
-        </NavLink>
-        
+      {/* Logout */}
+      <div className="p-4 border-t border-blue-700">
         <button
           onClick={handleLogout}
-          className="flex items-center w-full px-3 py-2 text-sm font-medium text-blue-100 hover:bg-white/10 hover:text-white rounded-lg transition-all duration-200"
+          className="w-full flex items-center p-3 text-red-300 hover:bg-red-900 hover:text-red-100 rounded-lg transition-colors"
         >
           <LogOut className="w-5 h-5 mr-3" />
-          Sair
+          <span className="font-medium">Sair</span>
         </button>
       </div>
     </div>

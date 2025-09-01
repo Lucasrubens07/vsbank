@@ -71,7 +71,7 @@ const RegisterPage = () => {
         {/* Formulário */}
         <div className="bg-blue-600 rounded-2xl p-8 border border-blue-500/50 shadow-2xl">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
+          <div className="space-y-4">
               <Input
                 label="Nome completo"
                 name="name"
@@ -127,15 +127,15 @@ const RegisterPage = () => {
                 onChange={handleChange}
                 fullWidth
               />
-            </div>
+          </div>
 
-            {error && (
+          {error && (
               <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
                 <p className="text-red-200 text-sm text-center">
-                  {error}
+              {error}
                 </p>
-              </div>
-            )}
+            </div>
+          )}
 
             <Button
               type="submit"
@@ -147,15 +147,15 @@ const RegisterPage = () => {
               {isLoading ? 'Criando conta...' : 'Criar conta'}
             </Button>
 
-            <div className="text-center">
-              <Link
-                to="/login"
+          <div className="text-center">
+            <Link
+              to="/login"
                 className="font-medium text-blue-100 hover:text-white transition-colors text-lg"
-              >
-                Já tem uma conta? Faça login
-              </Link>
-            </div>
-          </form>
+            >
+              Já tem uma conta? Faça login
+            </Link>
+          </div>
+        </form>
         </div>
 
         {/* Footer */}

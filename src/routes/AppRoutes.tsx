@@ -10,81 +10,53 @@ import ProfilePage from '../pages/ProfilePage';
 import UnderDevelopmentPage from '../pages/UnderDevelopmentPage';
 import { useAuthStore } from '../stores/authStore';
 
-// Componente de proteção de rota
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { token } = useAuthStore();
-  
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
-
-// Componente para rota de 2FA
-const TwoFARoute = ({ children }: { children: React.ReactNode }) => {
-  const { preToken } = useAuthStore();
-  
-  if (!preToken) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
-
 const AppRoutes = () => {
+  const { token } = useAuthStore();
+
   return (
     <Routes>
-      {/* Rotas públicas */}
+      {/* Rotas Públicas */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/twofa" element={<TwoFAPage />} />
       
-      {/* Rota de 2FA (protegida por preToken) */}
-      <Route path="/twofa" element={
-        <TwoFARoute>
-          <TwoFAPage />
-        </TwoFARoute>
-      } />
-      
-      {/* Rotas protegidas do dashboard */}
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <DashboardLayout />
-        </ProtectedRoute>
-      }>
+      {/* Rota raiz - redireciona para login ou dashboard */}
+      <Route 
+        path="/" 
+        element={
+          token ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+        } 
+      />
+
+      {/* Rotas Protegidas */}
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        {/* Dashboard Principal */}
         <Route index element={<HomePage />} />
+        
+        {/* Crédito */}
         <Route path="credito" element={<CreditPage />} />
+        <Route path="credito/fgts" element={<UnderDevelopmentPage />} />
+        <Route path="credito/consignado" element={<UnderDevelopmentPage />} />
+        <Route path="credito/consorcio" element={<UnderDevelopmentPage />} />
+        <Route path="credito/veicular" element={<UnderDevelopmentPage />} />
+        <Route path="credito/rural" element={<UnderDevelopmentPage />} />
+        <Route path="credito/portabilidade" element={<UnderDevelopmentPage />} />
+        <Route path="credito/luz" element={<UnderDevelopmentPage />} />
+        
+        {/* PIX */}
         <Route path="pix" element={<PixPage />} />
+        <Route path="pix/qr-code" element={<UnderDevelopmentPage />} />
+        <Route path="pix/copiaecola" element={<UnderDevelopmentPage />} />
+        <Route path="pix/extrato" element={<UnderDevelopmentPage />} />
+        <Route path="pix/chaves" element={<UnderDevelopmentPage />} />
+        <Route path="pix/duvidas" element={<UnderDevelopmentPage />} />
+        
+        {/* Minha Conta */}
         <Route path="minha-conta" element={<ProfilePage />} />
-        
-        {/* Rotas de Home */}
-        <Route path="entrada" element={<UnderDevelopmentPage type="entrada" />} />
-        <Route path="saida" element={<UnderDevelopmentPage type="saida" />} />
-        <Route path="relatorio" element={<UnderDevelopmentPage type="relatorio" />} />
-        
-        {/* Rotas de Crédito */}
-        <Route path="credito/fgts" element={<UnderDevelopmentPage type="fgts" />} />
-        <Route path="credito/consignado" element={<UnderDevelopmentPage type="consignado" />} />
-        <Route path="credito/consorcios" element={<UnderDevelopmentPage type="consorcios" />} />
-        <Route path="credito/veicular" element={<UnderDevelopmentPage type="veicular" />} />
-        <Route path="credito/rural" element={<UnderDevelopmentPage type="rural" />} />
-        <Route path="credito/portabilidade" element={<UnderDevelopmentPage type="portabilidade" />} />
-        <Route path="credito/luz" element={<UnderDevelopmentPage type="luz" />} />
-        
-        {/* Rotas de PIX */}
-        <Route path="pix/copiaecola" element={<UnderDevelopmentPage type="copiaecola" />} />
-        <Route path="pix/extrato" element={<UnderDevelopmentPage type="extrato" />} />
-        <Route path="pix/chaves" element={<UnderDevelopmentPage type="chaves" />} />
-        <Route path="pix/duvidas" element={<UnderDevelopmentPage type="duvidas" />} />
-        
-        {/* Outras rotas */}
-        <Route path="cartao" element={<UnderDevelopmentPage type="cartao" />} />
-        <Route path="investimentos" element={<UnderDevelopmentPage type="investimentos" />} />
       </Route>
-      
-      {/* Redirecionamento padrão */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+
+      {/* Rota 404 */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };
